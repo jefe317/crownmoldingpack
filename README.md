@@ -1,5 +1,3 @@
-# crownmoldingpack
-
 Custom Crown Molding in 3 seconds!
 ==================================
 
