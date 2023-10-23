@@ -913,7 +913,7 @@ def enum_previews_from_directory_items(self, context):
 
 
 class OBJECT_PT_CrownMoldingTools(Panel):
-    bl_label = "Crown Molding Tools v3.0"
+    bl_label = "Crown Molding Tools v3.1"
     bl_idname = "OBJECT_PT_crown_molding_tools"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
