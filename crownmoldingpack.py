@@ -552,7 +552,7 @@ class WM_OT_ConvertToCMP(Operator):
                         i.data.bevel_mode = 'OBJECT'
                     # set bevel profile to crown molding
                     selection = bpy.data.window_managers["WinMan"]. \
-                        my_previews.replace(".png", "")
+                        cmpy_previews.replace(".png", "")
                     if bpy.data.objects.get(selection) is not None:
                         i.data.bevel_object = \
                             bpy.data.objects[selection]
@@ -666,7 +666,7 @@ class WM_OT_ChangeSelected(Operator):
             for i in selectedobjects:
                 if (i.type == 'CURVE'):
                     selection = bpy.data.window_managers["WinMan"]. \
-                        my_previews.replace(".png", "")
+                        cmpy_previews.replace(".png", "")
                     if bpy.data.objects.get(selection) is not None:
                         i.data.bevel_object = \
                             bpy.data.objects[selection]
@@ -721,7 +721,7 @@ class WM_OT_AppendCMP(Operator):
 
     def execute(self, context):
         cmpfilepath = os.path.join(os.path.dirname(__file__),
-                                   "CrownMoldingPack-v3.0.blend")
+                                   "CrownMoldingPack-v3.1.blend")
         link = False
         # link all collections starting with 'MyCollection'
         with bpy.data.libraries. \
@@ -751,7 +751,7 @@ preview_collections = {}
 CMPicons = bpy.utils.previews.new()
 # the path is calculated relative to this py file inside the addon folder
 # '..' goes up a level, seems to be needed when in dev?
-my_icons_dir = os.path.join(os.path.dirname(__file__), "cmp-icons")
+cmpy_icons_dir = os.path.join(os.path.dirname(__file__), "cmp-icons")
 ceil_dir = os.path.join(os.path.dirname(__file__),
                         "cmp-path-thumbnails/ceil")
 flor_dir = os.path.join(os.path.dirname(__file__),
@@ -771,21 +771,21 @@ wind_dir = os.path.join(os.path.dirname(__file__),
 
 # load a preview thumbnail of a file and store in the previews collection
 CMPicons.load("icon_ceil",
-              os.path.join(my_icons_dir, "ceiling.png"), 'IMAGE')
+              os.path.join(cmpy_icons_dir, "ceiling.png"), 'IMAGE')
 CMPicons.load("icon_wind",
-              os.path.join(my_icons_dir, "window.png"), 'IMAGE')
+              os.path.join(cmpy_icons_dir, "window.png"), 'IMAGE')
 CMPicons.load("icon_panl",
-              os.path.join(my_icons_dir, "panel.png"), 'IMAGE')
+              os.path.join(cmpy_icons_dir, "panel.png"), 'IMAGE')
 CMPicons.load("icon_wall",
-              os.path.join(my_icons_dir, "wall.png"), 'IMAGE')
+              os.path.join(cmpy_icons_dir, "wall.png"), 'IMAGE')
 CMPicons.load("icon_flor",
-              os.path.join(my_icons_dir, "floor.png"), 'IMAGE')
+              os.path.join(cmpy_icons_dir, "floor.png"), 'IMAGE')
 CMPicons.load("icon_rail",
-              os.path.join(my_icons_dir, "rail.png"), 'IMAGE')
+              os.path.join(cmpy_icons_dir, "rail.png"), 'IMAGE')
 CMPicons.load("icon_corn",
-              os.path.join(my_icons_dir, "corner.png"), 'IMAGE')
+              os.path.join(cmpy_icons_dir, "corner.png"), 'IMAGE')
 CMPicons.load("icon_picf",
-              os.path.join(my_icons_dir, "pictureframe.png"), 'IMAGE')
+              os.path.join(cmpy_icons_dir, "pictureframe.png"), 'IMAGE')
 preview_collections["main"] = CMPicons
 # create aliases for icon names
 customicons = preview_collections["main"]
@@ -877,8 +877,8 @@ def enum_previews_from_directory_items(self, context):
     # Get the preview collection (defined in register func).
     pcoll = preview_collections["main"]
 
-    if directory == pcoll.my_previews_dir:
-        return pcoll.my_previews
+    if directory == pcoll.cmpy_previews_dir:
+        return pcoll.cmpy_previews
 
     if directory and os.path.exists(directory):
         # Scan the directory for png files
@@ -906,10 +906,10 @@ def enum_previews_from_directory_items(self, context):
     print(sorted_data)
     # end debug
 
-    # pcoll.my_previews = enum_items
-    pcoll.my_previews = sorted_data
-    pcoll.my_previews_dir = directory
-    return pcoll.my_previews
+    # pcoll.cmpy_previews = enum_items
+    pcoll.cmpy_previews = sorted_data
+    pcoll.cmpy_previews_dir = directory
+    return pcoll.cmpy_previews
 
 
 class OBJECT_PT_CrownMoldingTools(Panel):
@@ -935,10 +935,10 @@ class OBJECT_PT_CrownMoldingTools(Panel):
             row.prop(cmptool, "curvecategory", text="Category")
 
             row = layout.row()
-            row.template_icon_view(wm, "my_previews")
+            row.template_icon_view(wm, "cmpy_previews")
 
             row = layout.row()
-            row.prop(wm, "my_previews", text="Path Selection")
+            row.prop(wm, "cmpy_previews", text="Path Selection")
             # ======  END IMAGE SECTION ======
             row = layout.row()
             row.operator("wm.converttocmp")
@@ -1026,7 +1026,7 @@ def register():
     from bpy.props import (StringProperty, EnumProperty)
 
     # ====== BEGIN IMAGE SECTION ======
-    WindowManager.my_previews_dir = StringProperty(
+    WindowManager.cmpy_previews_dir = StringProperty(
         name="Folder Path",
         subtype='DIR_PATH',
         default=""
@@ -1072,13 +1072,13 @@ def register():
         default=""
     )
 
-    WindowManager.my_previews = EnumProperty(
+    WindowManager.cmpy_previews = EnumProperty(
         items=enum_previews_from_directory_items
     )
     import bpy.utils.previews
     pcoll = bpy.utils.previews.new()
-    pcoll.my_previews_dir = ""
-    pcoll.my_previews = ()
+    pcoll.cmpy_previews_dir = ""
+    pcoll.cmpy_previews = ()
 
     preview_collections["main"] = pcoll
     # ======  END  IMAGE SECTION ======
@@ -1095,7 +1095,7 @@ def unregister():
     from bpy.types import WindowManager
 
     # ====== BEGIN IMAGE SECTION ======
-    del WindowManager.my_previews
+    del WindowManager.cmpy_previews
     for CMPicons in preview_collections.values():
         bpy.utils.previews.remove(CMPicons)
     for pcoll in preview_collections.values():
