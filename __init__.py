@@ -96,13 +96,16 @@ from . import crownmoldingpack
 #  v 3.0.0 July 2023 Crown Molding Pack 3.0
 #    ☒ New UI for path selection
 #    ☒ New version numbering for less confusion by Jeff.
+#  v 3.1.0 October 2023 Crown Molding Pack 3.1
+#    ☒ Changed some variable names to avoid collision with other add-ons.
+#      Thanks for the report, Trey!
 
 bl_info = {
     "name": "Crown Molding Pack Tools",
     "description": "Helper tools for creating and "
     "manipulating crown molding in the 3D Viewport.",
     "author": "Jeff Lange @jefftml",
-    "version": (3, 0, 0),
+    "version": (3, 1, 0),
     "blender": (2, 80, 0),
     "location": "3D View > Tools",
     "warning": "",
