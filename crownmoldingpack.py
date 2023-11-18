@@ -87,10 +87,8 @@ class WM_OT_SelectAllCMP(Operator):
             for i in selectedobjects:
                 try:
                     print(i.data.bevel_object.name)
-                    # is cmp, do nothing really
+                    # is cmp, do nothing really, don't delete the line above
                 except AttributeError:
-                    print(i)
-                    # is not cmp, deselect
                     i.select_set(False)
         return {'FINISHED'}
 
@@ -502,7 +500,7 @@ class WM_OT_ConvertToCMP(Operator):
                             zGlobalPathPoints.append(
                                 float(zGlobalPathPoint) + 0)
                         if len(set(xGlobalPathPoints)) == 1:
-                            print("faces X")
+                            # faces X
                             bcst = bpy.context.scene.tool_settings
                             bcst.transform_pivot_point = 'MEDIAN_POINT'
                             bpy.ops.object.mode_set(mode='EDIT', toggle=False)
@@ -523,7 +521,7 @@ class WM_OT_ConvertToCMP(Operator):
                                 constraint_axis=(
                                     False, True, False), mirror=True)
                         if len(set(yGlobalPathPoints)) == 1:
-                            print("faces Y")
+                            # faces Y
                             bcst = bpy.context.scene.tool_settings
                             bcst.transform_pivot_point = 'MEDIAN_POINT'
                             bpy.ops.object.mode_set(mode='EDIT', toggle=False)
@@ -545,6 +543,7 @@ class WM_OT_ConvertToCMP(Operator):
                                     True, False, False), mirror=True)
                         if len(set(zGlobalPathPoints)) == 1:
                             print("faces Z")
+                            # Leave print or else you get error
                     # set bevel object
                     # new in 2.91, if current blender version is above
                     # 2.91.0, set bevel mode to object (previously default)
@@ -686,7 +685,7 @@ class WM_OT_ChangeSelected(Operator):
 
 
 class WM_OT_SetOptions(Operator):
-    # you can use this function to make a list of paths for the constant above
+    # you can use this function to make a list of paths for the CMPlist
     """Append .blend"""
     bl_label = "Set Options"
     bl_idname = "wm.cycleset"
@@ -707,6 +706,7 @@ class WM_OT_SetOptions(Operator):
                 for m in selectedobjects:
                     bpy.data.objects[m.name].select_set(True)
             print(sorted(cycleset))
+            # leave above print since that's the purpose of this class
         return {'FINISHED'}
 
 
@@ -734,7 +734,8 @@ class WM_OT_AppendCMP(Operator):
                 bpy.context.scene.collection.children.link(coll)
 
         included_collection_list_names = [
-            "CrownMoldingPack-v3.0", "CrownMoldingPack-v3.1"]
+            "CrownMoldingPack-v3.0", "CrownMoldingPack-v3.1",
+            "CrownMoldingPack-v3.2"]
         layer_collections = list(
             bpy.context.view_layer.layer_collection.children)
 
@@ -898,15 +899,7 @@ def enum_previews_from_directory_items(self, context):
             enum_items.append((name, name,
                                "Path Selection", thumb.icon_id, i))
 
-    # debug
-    print("==== unsorted enum items ==== \n")
-    print(enum_items)
-    print("==== SORTED enum items ==== \n")
     sorted_data = sorted(enum_items, key=lambda x: x[0])
-    print(sorted_data)
-    # end debug
-
-    # pcoll.cmpy_previews = enum_items
     pcoll.cmpy_previews = sorted_data
     pcoll.cmpy_previews_dir = directory
     return pcoll.cmpy_previews
@@ -996,27 +989,27 @@ class OBJECT_PT_CrownMoldingTools(Panel):
 # ------------------------------------------------------------------------
 
 classes = (
-    WM_OT_SelectAllCMP,
+    CrownMoldingProperties,
+    OBJECT_PT_CrownMoldingTools,
+    WM_OT_AllCurves2D,
+    WM_OT_AllCurves3D,
+    WM_OT_AppendCMP,
+    WM_OT_ChangeSelected,
     WM_OT_ConvertToCMP,
+    WM_OT_Curve3DToggle2D,
     WM_OT_CycleBack,
     WM_OT_CycleForward,
-    WM_OT_TiltCurvePositive,
-    WM_OT_TiltCurveNegative,
-    WM_OT_TiltCurveFlip,
     WM_OT_MirrorCurveX,
     WM_OT_MirrorCurveY,
     WM_OT_MirrorCurveZ,
-    WM_OT_ScaleCurvePositive,
     WM_OT_ScaleCurveNegative,
-    WM_OT_Curve3DToggle2D,
-    WM_OT_AllCurves2D,
-    WM_OT_AllCurves3D,
+    WM_OT_ScaleCurvePositive,
+    WM_OT_SelectAllCMP,
+    WM_OT_SetOptions,
     WM_OT_SwitchDirection,
-    WM_OT_ChangeSelected,
-    # WM_OT_SetOptions,
-    CrownMoldingProperties,
-    OBJECT_PT_CrownMoldingTools,
-    WM_OT_AppendCMP
+    WM_OT_TiltCurveFlip,
+    WM_OT_TiltCurveNegative,
+    WM_OT_TiltCurvePositive
 )
 
 
@@ -1096,12 +1089,9 @@ def unregister():
 
     # ====== BEGIN IMAGE SECTION ======
     del WindowManager.cmpy_previews
-    for CMPicons in preview_collections.values():
-        bpy.utils.previews.remove(CMPicons)
     for pcoll in preview_collections.values():
         bpy.utils.previews.remove(pcoll)
     preview_collections.clear()
-    bpy.utils.previews.remove()
     # ====== END IMAGE SECTION ======
 
     # unregisters list from above
