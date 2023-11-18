@@ -34,6 +34,8 @@ Curves are powerful, and with the Crown Molding Tools Add-on, you'll be in full 
 
 ### Changelog
 
+3.1.1 - Bugfix. Removed extra console logs, and fixed an error that happened when uninstalling the add-on.
+
 3.1 - Bugfix. Updated variable names to avoid collisions with other addons. Thanks for the report, Trey!
 
 3.0 - UI Update to show profile images, categories, append .blend file, select all paths, and set path actions, which are all user-requested features that should make things much easier for you!
